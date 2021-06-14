@@ -26,10 +26,8 @@ class MyTrackerPlugin : FlutterPlugin, MethodCallHandler, ActivityAware {
 
     override fun onAttachedToEngine(@NonNull flutterPluginBinding: FlutterPlugin.FlutterPluginBinding) {
         channel = MethodChannel(flutterPluginBinding.binaryMessenger, "my_tracker")
-        channel.setMethodCallHandler(this)
         context = flutterPluginBinding.applicationContext
-        MyTracker.initTracker("17669143473478956015", activity.application)
-        MyTracker.trackLaunchManually(activity)
+        channel.setMethodCallHandler(this)
     }
 
     override fun onMethodCall(@NonNull call: MethodCall, @NonNull result: Result) {
@@ -49,6 +47,9 @@ class MyTrackerPlugin : FlutterPlugin, MethodCallHandler, ActivityAware {
             "flush" -> {
                 flush(call, result)
             }
+            "setDebugMode" -> {
+                setDebugMode(call, result)
+            }
             else -> {
                 result.notImplemented()
             }
@@ -64,9 +65,9 @@ class MyTrackerPlugin : FlutterPlugin, MethodCallHandler, ActivityAware {
         val args = call.arguments as Map<*, *>
 
         val trackerParams = MyTracker.getTrackerParams()
-        trackerParams.customUserId = args["customId"] as String
-        trackerParams.email = args["email"] as String
-        trackerParams.phone = args["phone"] as String
+        trackerParams.customUserId = args["customId"] as String?
+        trackerParams.email = args["email"] as String?
+        trackerParams.phone = args["phone"] as String?
 
         result.success(null)
     }
@@ -105,6 +106,13 @@ class MyTrackerPlugin : FlutterPlugin, MethodCallHandler, ActivityAware {
 
     fun flush(call: MethodCall, result: Result) {
         MyTracker.flush()
+        result.success(null)
+    }
+
+    fun setDebugMode(call: MethodCall, result: Result) {
+        val args = call.arguments as Map<*, *>
+
+        MyTracker.setDebugMode(args["enableDebug"] as Boolean)
         result.success(null)
     }
 
