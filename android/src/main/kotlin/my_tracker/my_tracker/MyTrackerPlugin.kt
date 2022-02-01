@@ -65,9 +65,18 @@ class MyTrackerPlugin : FlutterPlugin, MethodCallHandler, ActivityAware {
         val args = call.arguments as Map<*, *>
 
         val trackerParams = MyTracker.getTrackerParams()
-        trackerParams.customUserId = args["customId"] as String?
-        trackerParams.email = args["email"] as String?
-        trackerParams.phone = args["phone"] as String?
+        if (args["customId"] != null) {
+            trackerParams.customUserId = args["customId"] as String?
+        }
+
+        if (args["email"] != null) {
+            trackerParams.email = args["email"] as String?
+        }
+
+        if (args["phone"] != null) {
+            trackerParams.phone = args["phone"] as String?
+        }
+
 
         result.success(null)
     }
@@ -118,11 +127,11 @@ class MyTrackerPlugin : FlutterPlugin, MethodCallHandler, ActivityAware {
 
 
     override fun onDetachedFromActivity() {
-        TODO("Not yet implemented")
+
     }
 
     override fun onReattachedToActivityForConfigChanges(binding: ActivityPluginBinding) {
-        TODO("Not yet implemented")
+        onAttachedToActivity(binding)
     }
 
     override fun onAttachedToActivity(binding: ActivityPluginBinding) {
@@ -130,6 +139,6 @@ class MyTrackerPlugin : FlutterPlugin, MethodCallHandler, ActivityAware {
     }
 
     override fun onDetachedFromActivityForConfigChanges() {
-        TODO("Not yet implemented")
+        onDetachedFromActivity()
     }
 }

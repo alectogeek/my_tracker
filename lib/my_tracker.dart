@@ -52,9 +52,9 @@ class MyTracker {
     return _channel.invokeMethod('flush');
   }
 
-  Future<void> setDebugMode(bool isDebugMode) {
+  Future<void> setDebugMode(bool enableDebug) {
     return _channel.invokeMethod('setDebugMode', {
-      'isDebugMode': isDebugMode,
+      'enableDebug': enableDebug,
     });
   }
 }
